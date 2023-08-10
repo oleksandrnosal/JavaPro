@@ -5,14 +5,13 @@
     <title>Опитування</title>
 </head>
 <body>
-<form method="POST" action="/check">
+<form method="POST" action="/submit">
 
-            <h2>Якій із запропонованих нижче дисциплін Ви віддаєте перевагу?</h2>
+            <h1>Якій із запропонованих нижче дисциплін Ви віддаєте перевагу?</h1>
     <li><label>Біг</label>
         <input type="checkbox" name="discipline" value="running"></li>
     <li><label>Силові тренування</label>
         <input type="checkbox" name="discipline" value="weigh training"></li>
-
 
             <h1> Який час для тренувань підходить саме для Вас?</h1>
             <li><label>Ранок</label>

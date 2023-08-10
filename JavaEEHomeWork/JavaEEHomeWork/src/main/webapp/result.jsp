@@ -13,5 +13,6 @@
 <p>Вечір:<%= request.getAttribute("eveningCount")%></p>
 
 <button type="index.jsp"/>
-<a href="index.jsp">Повернутися до опитування</a></body>
+<a href="index.jsp">Повернутися до опитування</a>
+</body>
 </html>

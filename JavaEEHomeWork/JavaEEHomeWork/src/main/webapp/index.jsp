@@ -5,7 +5,7 @@
     <title>Опитування</title>
 </head>
 <body>
-<form method="POST" action="/check">
+<form method="POST" action="/submit">
 
             <h1>Якій із запропонованих нижче дисциплін Ви віддаєте перевагу?</h1>
     <li><label>Біг</label>
