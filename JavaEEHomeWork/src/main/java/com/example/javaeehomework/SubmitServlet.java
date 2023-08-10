@@ -1,4 +1,6 @@
 package com.example.javaeehomework;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,48 +9,60 @@ import jakarta.servlet.http.HttpSession;
 
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @WebServlet(name = "submitServlet", value = "/submit")
 public class SubmitServlet extends HttpServlet {
 
-    int statYes = 0;
-    int statNo = 0;
+    private AtomicInteger runningCount = new AtomicInteger(0);
+    private AtomicInteger weightCount = new AtomicInteger(0);
+    private AtomicInteger morningCount = new AtomicInteger(0);
+    private AtomicInteger eveningCount = new AtomicInteger(0);
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String question1 = request.getParameter("question1");
-        String question2 = request.getParameter("question2");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        if (question1.equals("Yes")) {
-            statYes++;
-        } else {
-            statNo++;
+        String discipline = request.getParameter("discipline");
+        String day = request.getParameter("day");
+
+        if ("running".equals(discipline)) {
+            runningCount.incrementAndGet();
+        } else if ("weight training".equals(discipline)){
+        weightCount.incrementAndGet();
         }
-        if (question2.equals("Yes")) {
-            statYes++;
-        } else {
-            statNo++;
+
+        if ("morning".equals(day)) {
+            morningCount.incrementAndGet();
+        } else if ("evening".equals(day)){
+            eveningCount.incrementAndGet();
         }
 
-        HttpSession session = request.getSession(true);
-        session.setAttribute("question1", question1);
-        session.setAttribute("question2", question2);
-        session.setAttribute("Yes", statYes);
-        session.setAttribute("No", statNo);
-        session.setAttribute("Yes", statYes);
-        session.setAttribute("No", statNo);
+        response.sendRedirect(request.getContextPath() + "/submit?action=showResults");
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String action = request.getParameter("action");
+        if ("reset".equals(action)) {
+            runningCount.set(0);
+            weightCount.set(0);
+            morningCount.set(0);
+            eveningCount.set(0);
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
 
-        try {
-            response.sendRedirect("index.jsp");
+    } else if ("showResults".equals(action)) {
+        request.setAttribute("runningCount", runningCount.get());
+        request.setAttribute("weightCount", weightCount.get());
+        request.setAttribute("morningCount", morningCount.get());
+        request.setAttribute("eveningCount", eveningCount.get());
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/results.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }
-@Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("result.jsp");
-    }
-
     public void destroy() {
     }
 }
